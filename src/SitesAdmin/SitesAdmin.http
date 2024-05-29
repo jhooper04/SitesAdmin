@@ -1,0 +1,15 @@
+@SitesAdmin_HostAddress = http://localhost:5117
+
+GET {{SitesAdmin_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{SitesAdmin_HostAddress}}/category
+Content-Type: application/json
+
+{
+  //CategoryDto
+}
+
+###
