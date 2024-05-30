@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using SitesAdmin.Features.Common;
-using SitesAdmin.Features.Identity;
+using SitesAdmin.Features.Common.Data;
+using SitesAdmin.Features.Identity.Interfaces;
 
 namespace SitesAdmin.Data.Interceptors
 {

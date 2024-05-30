@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public int SiteId { get; set; }
-        public Site.SiteResponse Site { get; set; } = null!;
+        //public Site.SiteResponse Site { get; set; } = null!;
     }
 }

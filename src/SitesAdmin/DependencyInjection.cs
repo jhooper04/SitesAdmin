@@ -4,15 +4,12 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SitesAdmin.Data;
-using SitesAdmin.Features.Identity;
-using System;
+using SitesAdmin.Features.Identity.Data;
 using System.Text.Json.Serialization;
 using System.Text;
 using System.Reflection;
 using Ardalis.GuardClauses;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using SitesAdmin.Features.Message;
 using SitesAdmin.Services;
 
 namespace SitesAdmin

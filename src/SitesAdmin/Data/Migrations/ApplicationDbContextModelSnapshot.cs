@@ -162,7 +162,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("PostTag");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Asset.Asset", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Asset", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,7 +227,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Assets");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Asset.Folder", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Folder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,13 +267,16 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Folders");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Category.Category", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Categories.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Banner")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Body")
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
@@ -377,7 +380,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Message.Message", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Messages.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -408,7 +411,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Post.Post", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Posts.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -440,6 +443,9 @@ namespace SitesAdmin.Data.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset>("LastModified")
                         .HasColumnType("datetime");
@@ -475,7 +481,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Project.Project", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Projects.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -523,7 +529,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Site.Site", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Sites.Site", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -558,13 +564,16 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Sites");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Tag.Tag", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Tags.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Banner")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Body")
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
@@ -653,26 +662,26 @@ namespace SitesAdmin.Data.Migrations
 
             modelBuilder.Entity("PostTag", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Post.Post", null)
+                    b.HasOne("SitesAdmin.Features.Posts.Post", null)
                         .WithMany()
                         .HasForeignKey("PostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SitesAdmin.Features.Tag.Tag", null)
+                    b.HasOne("SitesAdmin.Features.Tags.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Asset.Asset", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Asset", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Asset.Folder", "Folder")
+                    b.HasOne("SitesAdmin.Features.Assets.Folder", "Folder")
                         .WithMany()
                         .HasForeignKey("FolderId");
 
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -683,13 +692,13 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Asset.Folder", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Folder", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Asset.Folder", "ParentFolder")
+                    b.HasOne("SitesAdmin.Features.Assets.Folder", "ParentFolder")
                         .WithMany("SubFolders")
                         .HasForeignKey("ParentFolderId");
 
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -700,9 +709,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Category.Category", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Categories.Category", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -711,9 +720,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Message.Message", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Messages.Message", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -722,26 +731,28 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Post.Post", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Posts.Post", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Category.Category", null)
+                    b.HasOne("SitesAdmin.Features.Categories.Category", "Category")
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Project.Project", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Projects.Project", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -750,9 +761,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Tag.Tag", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Tags.Tag", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Site.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -761,12 +772,12 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Asset.Folder", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Folder", b =>
                 {
                     b.Navigation("SubFolders");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Category.Category", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Categories.Category", b =>
                 {
                     b.Navigation("Posts");
                 });

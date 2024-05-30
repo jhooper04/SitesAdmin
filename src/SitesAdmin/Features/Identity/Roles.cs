@@ -5,9 +5,4 @@
         public const string Administrator = nameof(Administrator);
         public const string User = nameof(User);
     }
-    //public enum Role
-    //{
-    //    Admin,
-    //    User
-    //}
 }

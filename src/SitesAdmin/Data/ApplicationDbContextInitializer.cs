@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SitesAdmin.Features.Category;
+using SitesAdmin.Features.Categories.Data;
 using SitesAdmin.Features.Identity;
-using SitesAdmin.Features.Project;
-using SitesAdmin.Features.Site;
-using SitesAdmin.Features.Tag;
+using SitesAdmin.Features.Identity.Data;
+using SitesAdmin.Features.Posts.Data;
+using SitesAdmin.Features.Projects.Data;
+using SitesAdmin.Features.Sites.Data;
+using SitesAdmin.Features.Tags.Data;
 
 namespace SitesAdmin.Data
 {
@@ -119,14 +121,6 @@ namespace SitesAdmin.Data
 
                 await _context.SaveChangesAsync();
 
-            }
-            //else if (_context.Sites.Count() == 1)
-            //{
-            //    site = _context.Sites.FirstOrDefault();
-            //}
-
-            if (!_context.Projects.Any() && site != null)
-            {
                 var project = new Project
                 {
                     Name = "Time Trace",
@@ -140,11 +134,6 @@ namespace SitesAdmin.Data
 
                 _context.Projects.Add(project);
 
-                await _context.SaveChangesAsync();
-            }
-
-            if (!_context.Categories.Any() && site != null)
-            {
                 var category = new Category
                 {
                     Name = "Devlog",
@@ -170,11 +159,6 @@ namespace SitesAdmin.Data
                 _context.Categories.Add(category2);
                 _context.Categories.Add(category3);
 
-                await _context.SaveChangesAsync();
-            }
-
-            if (!_context.Tags.Any() && site != null)
-            {
                 var tag = new Tag
                 {
                     Name = "Asp.Net",
@@ -199,6 +183,97 @@ namespace SitesAdmin.Data
                 _context.Tags.Add(tag);
                 _context.Tags.Add(tag2);
                 _context.Tags.Add(tag3);
+
+                await _context.SaveChangesAsync();
+
+                var post = new Post
+                {
+                    Title = "Website Launched",
+                    Description = "Today I launched my new personal protfolio website",
+                    Author = "Jake Hooper",
+                    Body = @"
+Released and published my first blog post on my new website.
+
+## Features
+
+",
+                    PublishDate = DateTime.Now,
+                    IsFeatured = true,
+                    SiteId = site.Id,
+                    Tags = [tag, tag2, tag3],
+                    Category = category,
+                };
+
+                var post2 = new Post
+                {
+                    Title = "Using NSwag to generate Typescript api clients",
+                    Description = "Working through different methods of NSwag",
+                    Author = "Jake Hooper",
+                    Body = @"
+## The setup
+
+##
+                ",
+                    PublishDate = DateTime.Now,
+                    IsFeatured = true,
+                    SiteId = site.Id,
+                    Tags = [tag, tag2],
+                    Category = category2,
+                };
+
+                var post3 = new Post
+                {
+                    Title = "Website Launched",
+                    Description = "Today I launched my new personal protfolio website",
+                    Author = "Jake Hooper",
+                    Body = @"
+Released and published my first blog post on my new website.
+
+",
+                    PublishDate = DateTime.Now,
+                    IsFeatured = true,
+                    SiteId = site.Id,
+                    Tags = [tag],
+                    Category = category3,
+                };
+
+                var post4 = new Post
+                {
+                    Title = "Website Launched",
+                    Description = "Today I launched my new personal protfolio website",
+                    Author = "Jake Hooper",
+                    Body = @"
+
+Released and published my first blog post on my new website.
+
+",
+                    PublishDate = DateTime.Now,
+                    SiteId = site.Id,
+                    Tags = [tag3],
+                    Category = category2,
+                };
+
+                var post5 = new Post
+                {
+                    Title = "Website Launched",
+                    Description = "Today I launched my new personal protfolio website",
+                    Author = "Jake Hooper",
+                    Body = @"
+
+Released and published my first blog post on my new website.
+
+",
+                    PublishDate = DateTime.Now,
+                    SiteId = site.Id,
+                    Tags = [tag2, tag3],
+                    Category = category,
+                };
+
+                _context.Posts.Add(post);
+                _context.Posts.Add(post2);
+                _context.Posts.Add(post3);
+                _context.Posts.Add(post4);
+                _context.Posts.Add(post5);
 
                 await _context.SaveChangesAsync();
             }

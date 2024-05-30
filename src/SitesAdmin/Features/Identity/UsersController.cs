@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SitesAdmin.Data;
+using SitesAdmin.Features.Identity.Dto;
+using SitesAdmin.Features.Identity.Data;
 using SitesAdmin.Services;
 using System.Security.Cryptography;
 

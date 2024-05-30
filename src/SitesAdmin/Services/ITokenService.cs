@@ -1,4 +1,4 @@
-﻿using SitesAdmin.Features.Identity;
+﻿using SitesAdmin.Features.Identity.Data;
 
 namespace SitesAdmin.Services
 {

@@ -9,15 +9,16 @@ using System.Text.Json.Serialization;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Ardalis.GuardClauses;
-using System.Configuration;
 using System.Reflection;
-using Microsoft.Extensions.Hosting;
-using Google.Protobuf.WellKnownTypes;
 using SitesAdmin.Services;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SitesAdmin.Data.Interceptors;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using SitesAdmin.Features.Identity.Services;
+using SitesAdmin.Features.Identity.Handlers;
+using SitesAdmin.Features.Identity.Interfaces;
+using SitesAdmin.Features.Identity.Data;
+using AutoMapper;
 
 namespace SitesAdmin
 {
@@ -39,6 +40,17 @@ namespace SitesAdmin
 
             builder.Services.AddSwaggerGen(option =>
             {
+                option.CustomSchemaIds(type => {
+                    string name = type.Name ?? "";
+                    var types = type.GetGenericArguments().Select(t=>t.Name);
+                    name = string.Join("", types) + name;
+                    name = name.Replace("`1", "")
+                        .Replace(type.Namespace + ".", "")
+                        .Replace("Response", "")
+                        .Replace("Paginated", "");
+                    return name;
+                });
+                option.SupportNonNullableReferenceTypes();
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "Test API", Version = "v1" });
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -131,6 +143,9 @@ namespace SitesAdmin
             builder.Services.AddScoped<ITokenService, TokenService>();
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            
+
             builder.Services.AddSingleton(TimeProvider.System);
 
             // Support string to enum conversions
@@ -217,6 +232,9 @@ namespace SitesAdmin
 
             // Build the app
             var app = builder.Build();
+
+            var mapper = app.Services.GetRequiredService<IMapper>();
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             app.UseCors(corsPolicy);
 

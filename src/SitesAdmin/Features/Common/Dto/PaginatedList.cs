@@ -45,7 +45,12 @@ namespace SitesAdmin.Features.Common
 
             var result = await _PagedQuery(source, pageNumber.Value, pageSize.Value);
 
-            var mappedItems = mapper.Map<List<TOut>>(result.Items);
+            var mappedItems = new List<TOut>();
+            foreach (var item in result.Items)
+            {
+                mappedItems.Add(mapper.Map<T, TOut>(item));
+            }
+            //var mappedItems = mapper.Map<List<TOut>>(result.Items);
             return new PaginatedList<TOut>(mappedItems, result.Count, pageNumber.Value, pageSize.Value);
         }
     }

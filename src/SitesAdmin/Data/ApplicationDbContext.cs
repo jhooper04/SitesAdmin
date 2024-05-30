@@ -1,14 +1,14 @@
 ﻿using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SitesAdmin.Features.Site;
-using SitesAdmin.Features.Category;
-using SitesAdmin.Features.Identity;
-using SitesAdmin.Features.Message;
-using SitesAdmin.Features.Post;
-using SitesAdmin.Features.Tag;
-using SitesAdmin.Features.Project;
-using SitesAdmin.Features.Asset;
+using SitesAdmin.Features.Sites.Data;
+using SitesAdmin.Features.Categories.Data;
+using SitesAdmin.Features.Identity.Data;
+using SitesAdmin.Features.Messages.Data;
+using SitesAdmin.Features.Posts.Data;
+using SitesAdmin.Features.Tags.Data;
+using SitesAdmin.Features.Projects.Data;
+using SitesAdmin.Features.Assets.Data;
 using System.Reflection;
 
 namespace SitesAdmin.Data

@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
-using SitesAdmin.Features.Identity;
+using SitesAdmin.Features.Identity.Data;
 
 public class TokenService : ITokenService
 {
