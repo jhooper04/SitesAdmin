@@ -227,7 +227,8 @@ namespace SitesAdmin
                     .AllowAnyMethod()
                     .SetIsOriginAllowed(isOriginAllowed => true)
                     .AllowAnyHeader()
-                    .AllowCredentials());
+                    .AllowCredentials()
+                    .WithExposedHeaders("Www-Authenticate"));
             });
 
             // Build the app
