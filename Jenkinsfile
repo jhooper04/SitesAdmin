@@ -1,14 +1,14 @@
 pipeline {
     agent any
     stages {
-        stage('Verify tooling') {
+        stage("Verify tooling") {
             steps {
-                sh ```
+                sh '''
                     docker version
                     docker info
                     docker compose version
                     git --version
-                ```
+                '''
             }
         }
     }
