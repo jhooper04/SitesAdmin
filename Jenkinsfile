@@ -19,7 +19,7 @@ pipeline {
                             docker compose down
                         fi
                         cp $ENV_PATH .env.production
-                        docker compose --env-file .env.production up
+                        docker compose --env-file .env.production up -d
                     '''
                 }
             }
