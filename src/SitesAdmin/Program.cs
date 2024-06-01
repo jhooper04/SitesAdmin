@@ -202,7 +202,7 @@ namespace SitesAdmin
                         ValidIssuer = validIssuer,
                         ValidAudience = validAudience,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(symmetricSecurityKey ?? string.Empty)
+                            Encoding.UTF8.GetBytes(symmetricSecurityKey ?? "TestKey")
                         ),
                     };
                 });

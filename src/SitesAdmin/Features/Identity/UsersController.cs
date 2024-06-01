@@ -106,15 +106,15 @@ namespace SitesAdmin.Features.Identity
             });
         }
 
-        //[HttpGet]
-        //public ActionResult GenerateApiKey()
-        //{
-        //    var key = new byte[128];
-        //    using (var generator = RandomNumberGenerator.Create())
-        //    {
-        //        generator.GetBytes(key);
-        //    }
-        //    return Ok(new { Key = Convert.ToBase64String(key)});
-        //}
+        [HttpGet]
+        public ActionResult GenerateApiKey()
+        {
+            var key = new byte[128];
+            using (var generator = RandomNumberGenerator.Create())
+            {
+                generator.GetBytes(key);
+            }
+            return Ok(new { Key = Convert.ToBase64String(key) });
+        }
     }
 }
