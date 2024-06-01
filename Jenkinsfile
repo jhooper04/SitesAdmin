@@ -6,7 +6,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'sitesadmin-env', variable: 'ENV_PATH')]) {
                     sh '''
                         cp $ENV_PATH .env.production
-                        docker compose up --build --env-file .env.production 
+                        docker compose --build --env-file .env.production up
                     '''
                 }
             }
@@ -19,7 +19,7 @@ pipeline {
                             docker compose down
                         fi
                         cp $ENV_PATH .env.production
-                        docker compose up --env-file .env.production 
+                        docker compose --env-file .env.production up
                     '''
                 }
             }
