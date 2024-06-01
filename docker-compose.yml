@@ -8,6 +8,8 @@ services:
       - ${ENV_PATH}
     ports:
       - "5000:5000"
+    networks:
+      - sitesadmin-net
     volumes: 
       - ${HOST_ASSETS_DIRECTORY}:/assets:rw
     build:
@@ -20,3 +22,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_HTTP_PORTS=5000
+networks:
+  sitesadmin-net:
+    driver: bridge

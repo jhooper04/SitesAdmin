@@ -106,8 +106,8 @@ namespace SitesAdmin.Features.Identity
             });
         }
 
-        [HttpGet]
-        public ActionResult GenerateApiKey()
+        [HttpGet("generateKey", Name = "[controller]generateKey")]
+        public ActionResult GenerateRandomKey()
         {
             var key = new byte[128];
             using (var generator = RandomNumberGenerator.Create())

@@ -30,13 +30,19 @@ namespace SitesAdmin.Data
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IConfiguration _configuration;
 
-        public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, 
+            ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager, 
+            RoleManager<IdentityRole> roleManager,
+            IConfiguration configuration)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _configuration = configuration;
         }
 
         public async Task InitialiseAsync()
@@ -97,10 +103,18 @@ namespace SitesAdmin.Data
 
             // Add Default users
 
+            var environment = _configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") ?? "Development";
+            var adminUser = _configuration.GetValue<string>("ADMIN_USER") ?? "contact@jakehooper.pro";
+            var adminPassword = _configuration.GetValue<string>("ADMIN_PASS") ?? "Admin1!";
+
             List<(ApplicationUser User, string Password)> defaultUsers = new() {
-                (new ApplicationUser { UserName = "contact@jakehooper.pro", Email = "contact@jakehooper.pro", Role=Role.Administrator  }, "Admin1!"),
-                (new ApplicationUser { UserName = "jakeh04@gmail.com", Email = "jakeh04@gmail.com", Role=Role.User }, "Jake1!"),
+                (new ApplicationUser { UserName = adminUser, Email = adminUser, Role=Role.Administrator  }, adminPassword),
             };
+
+            if (environment == "Development")
+            {
+                defaultUsers.Add((new ApplicationUser { UserName = "jakehooper@test.com", Email = "jakehooper@test.com", Role = Role.User }, "Jake1!"));
+            }
 
             foreach (var user in defaultUsers)
             {

@@ -19,6 +19,8 @@ services:
     restart: unless-stopped
     ports:
       - 3306:3306
+    networks:
+      - sitesadmin-net
     volumes:
       - sitesadmin-mariadb:/var/lib/mysql:rw
     environment:
@@ -34,8 +36,8 @@ services:
       - mariadb
     ports:
       - 8080:80
-    links:
-      - mariadb
+    networks:
+      - sitesadmin-net
     environment:
       - PMA_HOST=mariadb
       - PMA_USER=${_APP_DB_USER}
