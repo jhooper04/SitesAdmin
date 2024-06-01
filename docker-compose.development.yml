@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  sitesadmin:
+    depends_on:
+      - mariadb
+  # ef-tool:
+    # image: ${DOCKER_REGISTRY-}sitesadmin-eftool
+    # container_name: sitesadmin-eftool
+    # build:
+    #   context: .
+    #   dockerfile: ./src/SitesAdmin/EfToolDockerfile
+    # volumes:
+    #   - ./src:/src
+    # entrypoint: ["dotnet", "ef"]
+  mariadb:
+    image: mariadb:10.7
+    container_name: sitesadmin-mariadb
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - sitesadmin-mariadb:/var/lib/mysql:rw
+    environment:
+      - MYSQL_ROOT_PASSWORD=${_APP_DB_ROOT_PASS}
+      - MYSQL_DATABASE=${_APP_DB_SCHEMA}
+      - MYSQL_USER=${_APP_DB_USER}
+      - MYSQL_PASSWORD=${_APP_DB_PASS}
+    command: 'mysqld --innodb-flush-method=fsync'
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    depends_on:
+      - mariadb
+    ports:
+      - 8080:80
+    links:
+      - mariadb
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_USER=${_APP_DB_USER}
+      - PMA_PASSWORD=${_APP_DB_PASS}
+      - PMA_DB_ENGINE=mariadb
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+    restart: always
+volumes:
+  sitesadmin-mariadb:

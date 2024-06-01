@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SitesAdmin\src\SitesAdmin\SitesAdmin.csproj" />
+    <ProjectReference Include="..\..\..\SitesAdmin\src\SitesAdmin\SitesAdmin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
