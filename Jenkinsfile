@@ -5,7 +5,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'sitesadmin-env', variable: 'ENV_PATH')]) {
                     sh '''
-                        docker compose build -f docker-compose.yml
+                        docker compose up -f docker-compose.yml up --build 
                     '''
                 }
             }
@@ -15,9 +15,9 @@ pipeline {
                 withCredentials([file(credentialsId: 'sitesadmin-env', variable: 'ENV_PATH')]) {
                     sh '''
                         if [ $(docker ps -q -f name=sitesadmin) ]; then
-                            docker compose down -f docker-compose.yml
+                            docker compose up -f docker-compose.yml down
                         fi
-                        docker compose up -d -f docker-compose.yml
+                        docker compose up -f docker-compose.yml up --no-build
                     '''
                 }
             }
