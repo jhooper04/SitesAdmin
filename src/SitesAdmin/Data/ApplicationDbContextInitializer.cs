@@ -43,7 +43,10 @@ namespace SitesAdmin.Data
         {
             try
             {
-                await _context.Database.MigrateAsync();
+                if (_context.Database.IsRelational())
+                {
+                    await _context.Database.MigrateAsync();
+                }
             }
             catch (Exception ex)
             {
