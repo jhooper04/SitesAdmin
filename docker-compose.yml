@@ -11,7 +11,7 @@ services:
     networks:
       - sitesadmin-net
     volumes: 
-      - ${HOST_ASSETS_DIRECTORY}:/assets:rw
+      - ${HOST_ASSETS_DIRECTORY}:/assets
     build:
       context: .
       dockerfile: ./src/SitesAdmin/Dockerfile

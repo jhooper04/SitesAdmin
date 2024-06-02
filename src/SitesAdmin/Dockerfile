@@ -27,4 +27,7 @@ RUN dotnet ef migrations bundle --project "./src/SitesAdmin/SitesAdmin.csproj" -
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN mkdir -p /home/app/.aspnet/DataProtection-Keys
+
 ENTRYPOINT ["dotnet", "SitesAdmin.dll"]
