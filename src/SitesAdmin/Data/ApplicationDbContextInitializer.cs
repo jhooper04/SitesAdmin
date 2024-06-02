@@ -80,7 +80,13 @@ namespace SitesAdmin.Data
 
             if (_roleManager.Roles.All(r => r.Name != identityRole.Name))
             {
-                await _roleManager.CreateAsync(identityRole);
+                var result = await _roleManager.CreateAsync(identityRole);
+
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("Failed to insert role {0}", identityRole.Name);
+                    throw new Exception($"Failed to insert role {identityRole.Name}");
+                }
             }
         }
 
@@ -88,8 +94,20 @@ namespace SitesAdmin.Data
         {
             if (_userManager.Users.All(u => u.UserName != user.UserName))
             {
-                await _userManager.CreateAsync(user, password);
-                await _userManager.AddToRolesAsync(user, [user.Role]);
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("Failed to insert user {0}", user.UserName);
+                    throw new Exception($"Failed to insert user {user.UserName}");
+                }
+                var addResult = await _userManager.AddToRolesAsync(user, [user.Role]);
+
+                if (!addResult.Succeeded)
+                {
+                    _logger.LogError("Failed to add user {0} to role {1}", user.UserName, user.Role);
+                    throw new Exception($"Failed to add user {user.UserName} to role {user.Role}");
+                }
             }
         }
 
