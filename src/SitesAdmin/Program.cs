@@ -19,6 +19,7 @@ using SitesAdmin.Features.Identity.Handlers;
 using SitesAdmin.Features.Identity.Interfaces;
 using SitesAdmin.Features.Identity.Data;
 using AutoMapper;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace SitesAdmin
 {
@@ -233,6 +234,11 @@ namespace SitesAdmin
 
             // Build the app
             var app = builder.Build();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             var mapper = app.Services.GetRequiredService<IMapper>();
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
