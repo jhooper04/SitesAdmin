@@ -58,8 +58,7 @@ namespace SitesAdmin
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
-                options.UseMySQL(connectionString);
+                options.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 7, 8)));
             });
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());

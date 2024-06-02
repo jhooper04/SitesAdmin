@@ -5,7 +5,7 @@ services:
     networks:
       - database 
     volumes:
-      - sitesadmin-data-protection-keys:/home/app/.aspnet/DataProtection-Keys
+      - sitesadmin-data-protection-keys:/home/app/.aspnet/DataProtection-Keys:rw
 networks:
   database:
     external: true

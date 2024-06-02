@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SitesAdmin.Data;
 
@@ -18,6 +19,8 @@ namespace SitesAdmin.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -51,6 +54,8 @@ namespace SitesAdmin.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
 
@@ -73,6 +78,8 @@ namespace SitesAdmin.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
@@ -162,11 +169,13 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("PostTag");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Assets.Asset", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Data.Asset", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AccessRoles")
                         .HasColumnType("longtext");
@@ -176,7 +185,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -202,7 +211,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -227,23 +236,25 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Assets");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Assets.Folder", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Data.Folder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("AccessRoles")
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -267,11 +278,13 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Folders");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Categories.Category", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Categories.Data.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Banner")
                         .HasColumnType("longtext");
@@ -280,7 +293,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -293,7 +306,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -312,7 +325,7 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Identity.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -335,7 +348,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -380,18 +393,20 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Messages.Message", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Messages.Data.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -411,11 +426,13 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Posts.Post", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Posts.Data.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -432,7 +449,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -448,7 +465,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -481,17 +498,19 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Projects.Project", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Projects.Data.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Body")
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -510,7 +529,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -529,18 +548,20 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Sites.Site", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Sites.Data.Site", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BaseUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -550,7 +571,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -564,11 +585,13 @@ namespace SitesAdmin.Data.Migrations
                     b.ToTable("Sites");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Tags.Tag", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Tags.Data.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Banner")
                         .HasColumnType("longtext");
@@ -577,7 +600,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -590,7 +613,7 @@ namespace SitesAdmin.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
@@ -620,7 +643,7 @@ namespace SitesAdmin.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Identity.ApplicationUser", null)
+                    b.HasOne("SitesAdmin.Features.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -629,7 +652,7 @@ namespace SitesAdmin.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Identity.ApplicationUser", null)
+                    b.HasOne("SitesAdmin.Features.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -644,7 +667,7 @@ namespace SitesAdmin.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SitesAdmin.Features.Identity.ApplicationUser", null)
+                    b.HasOne("SitesAdmin.Features.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -653,7 +676,7 @@ namespace SitesAdmin.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Identity.ApplicationUser", null)
+                    b.HasOne("SitesAdmin.Features.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -662,26 +685,26 @@ namespace SitesAdmin.Data.Migrations
 
             modelBuilder.Entity("PostTag", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Posts.Post", null)
+                    b.HasOne("SitesAdmin.Features.Posts.Data.Post", null)
                         .WithMany()
                         .HasForeignKey("PostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SitesAdmin.Features.Tags.Tag", null)
+                    b.HasOne("SitesAdmin.Features.Tags.Data.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Assets.Asset", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Data.Asset", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Assets.Folder", "Folder")
+                    b.HasOne("SitesAdmin.Features.Assets.Data.Folder", "Folder")
                         .WithMany()
                         .HasForeignKey("FolderId");
 
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -692,13 +715,13 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Assets.Folder", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Data.Folder", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Assets.Folder", "ParentFolder")
+                    b.HasOne("SitesAdmin.Features.Assets.Data.Folder", "ParentFolder")
                         .WithMany("SubFolders")
                         .HasForeignKey("ParentFolderId");
 
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -709,9 +732,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Categories.Category", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Categories.Data.Category", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -720,9 +743,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Messages.Message", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Messages.Data.Message", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -731,15 +754,15 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Posts.Post", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Posts.Data.Post", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Categories.Category", "Category")
+                    b.HasOne("SitesAdmin.Features.Categories.Data.Category", "Category")
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -750,9 +773,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Projects.Project", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Projects.Data.Project", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -761,9 +784,9 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Tags.Tag", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Tags.Data.Tag", b =>
                 {
-                    b.HasOne("SitesAdmin.Features.Sites.Site", "Site")
+                    b.HasOne("SitesAdmin.Features.Sites.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -772,12 +795,12 @@ namespace SitesAdmin.Data.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Assets.Folder", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Assets.Data.Folder", b =>
                 {
                     b.Navigation("SubFolders");
                 });
 
-            modelBuilder.Entity("SitesAdmin.Features.Categories.Category", b =>
+            modelBuilder.Entity("SitesAdmin.Features.Categories.Data.Category", b =>
                 {
                     b.Navigation("Posts");
                 });

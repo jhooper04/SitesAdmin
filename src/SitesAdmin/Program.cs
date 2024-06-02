@@ -20,6 +20,7 @@ using SitesAdmin.Features.Identity.Interfaces;
 using SitesAdmin.Features.Identity.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.HttpOverrides;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace SitesAdmin
 {
@@ -129,8 +130,7 @@ namespace SitesAdmin
             builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
-                options.UseMySQL(connectionString);
+                options.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 7, 8)));
             });
 
             builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
