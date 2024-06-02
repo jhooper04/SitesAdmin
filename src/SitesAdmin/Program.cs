@@ -250,8 +250,9 @@ namespace SitesAdmin
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                await app.InitialiseDatabaseAsync();
             }
+
+            await app.InitialiseDatabaseAsync();
 
             //app.UseHttpsRedirection();
             app.UseStatusCodePages();
