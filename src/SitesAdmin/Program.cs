@@ -105,8 +105,6 @@ namespace SitesAdmin
             builder.Services.AddApiVersioning();
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-            // Add DB Contexts
-            // Move the connection string to user secrets for release
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
@@ -126,10 +124,16 @@ namespace SitesAdmin
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            builder.Services.AddSingleton<ISaveChangesInterceptor, SluggableSaveChangesInterceptor>();
+
+            builder.Services.AddSingleton<IMaterializationInterceptor, SluggableMaterializeInterceptor>();
 
             builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
-                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options
+                    .AddInterceptors(sp.GetServices<ISaveChangesInterceptor>())
+                    .AddInterceptors(sp.GetServices<IMaterializationInterceptor>());
+
                 options.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 7, 8)));
             });
 
@@ -137,9 +141,7 @@ namespace SitesAdmin
 
             builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
-            //builder.Services.AddSingleton<ApiKeyAuthorizationFilter>();
             builder.Services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();
-
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -178,8 +180,6 @@ namespace SitesAdmin
             var symmetricSecurityKey = builder.Configuration.GetValue<string>("JWT_KEY"); // builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
 
             if (symmetricSecurityKey == null) infoMessages.Add((LogLevel.Error, $"Missing SymmetricSecurityKey configuration"));
-
-            
 
             builder.Services.AddAuthentication(options =>
             {
@@ -269,63 +269,6 @@ namespace SitesAdmin
             }
 
             app.Run();
-
-            //var builder = WebApplication.CreateBuilder(args);
-
-            //builder.Configuration.AddEnvironmentVariables("_APP_");
-            //builder.Configuration.AddCommandLine(args);
-
-            //DotNetEnv.Env.Load("../..");
-
-            //builder.Services.AddInfrastructureServices(builder.Configuration);
-            //builder.Services.AddApplicationServices(builder.Configuration);
-
-            //builder.Services.AddWebApiServices(builder.Environment, builder.Configuration);
-
-            //// Add services to the container.
-
-
-
-            ////var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-            ////Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
-
-            ////string[] envDbKeys = new string[] { "DB_SERVER", "DB_SCHEMA", "DB_USER", "DB_PASS" };
-
-            ////foreach (var envDbKey in envDbKeys)
-            ////{
-            ////    connectionString = connectionString.Replace($"{{{envDbKey}}}", builder.Configuration.GetValue<string>(envDbKey)); // ?? throw new InvalidOperationException("Missing connection string configuration")); //
-            ////}
-
-            ////builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
-            ////{
-            ////    //options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
-            ////    options.UseMySQL(connectionString);
-            ////});
-
-            ////services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
-            ////builder.Services.AddScoped<ApplicationDbContextInitialiser>();
-
-
-
-            //var app = builder.Build();
-
-            //// Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    //app.UseSwagger();
-            //    //app.UseSwaggerUI();
-            //    //await app.InitialiseDatabaseAsync();
-            //}
-
-            ////app.UseAuthorization();
-
-
-            ////app.MapControllers();
-
-            //app.Run();
         }
     }
 }

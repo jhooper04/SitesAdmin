@@ -1,4 +1,4 @@
-﻿using SitesAdmin.Features.Common;
+﻿using SitesAdmin.Features.Common.Interfaces;
 
 namespace SitesAdmin.Features.Sites.Dto
 {
@@ -6,7 +6,7 @@ namespace SitesAdmin.Features.Sites.Dto
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public required string Slug { get; set; }
+        public string? Slug { get; set; }
         public string Description { get; set; } = "";
         public required string BaseUrl { get; set; }
         public DateTimeOffset Created { get; set; }

@@ -4,13 +4,15 @@ using SitesAdmin.Features.Common;
 using SitesAdmin.Features.Categories.Data;
 using SitesAdmin.Features.Tags.Data;
 using SitesAdmin.Features.Common.Data;
+using SitesAdmin.Features.Common.Interfaces;
+using System.Xml.Linq;
 
 namespace SitesAdmin.Features.Posts.Data
 {
-    public class Post : BaseAuditableEntity
+    public class Post : BaseAuditableEntity, ISluggable
     {
         public required string Title { get; set; }
-        public string Slug { get { return SlugUtil.Slugify(Title); } }
+        public string? Slug { get; set; }
         public string Description { get; set; } = "";
         public required string Author { get; set; }
         public string? AuthorAvatar { get; set; }
@@ -25,5 +27,7 @@ namespace SitesAdmin.Features.Posts.Data
         public List<Tag> Tags { get; set; } = [];
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
+
+        public string GetSlugDisplayName() { return Title; }
     }
 }

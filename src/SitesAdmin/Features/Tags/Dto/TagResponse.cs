@@ -6,7 +6,7 @@ namespace SitesAdmin.Features.Tags.Dto
     {
         public required string Name { get; set; }
         public required string Description { get; set; }
-        public required string Slug { get; set; }
+        public string? Slug { get; set; }
         public required string Icon { get; set; }
         public required string Banner { get; set; }
         public string? Body { get; set; }

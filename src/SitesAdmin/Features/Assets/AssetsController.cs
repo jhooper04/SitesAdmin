@@ -46,7 +46,7 @@ namespace SitesAdmin.Features.Assets
             var dbModel = _mapper.Map<Asset>(model);
 
             var uniqueFileName = GetUniqueFileName(model.File.FileName);
-            var filePath = Path.Combine(uploadsDir, folder.Site.Slug, uniqueFileName);
+            var filePath = Path.Combine(uploadsDir, folder.Site.Slug ?? throw new Exception("Should Never happen, invalid slug in Upload Assets"), uniqueFileName);
 
             model.File.CopyTo(new FileStream(filePath, FileMode.Create));
 

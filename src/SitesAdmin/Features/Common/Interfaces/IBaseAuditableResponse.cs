@@ -1,4 +1,4 @@
-﻿namespace SitesAdmin.Features.Common
+﻿namespace SitesAdmin.Features.Common.Interfaces
 {
     public interface IBaseAuditableResponse
     {

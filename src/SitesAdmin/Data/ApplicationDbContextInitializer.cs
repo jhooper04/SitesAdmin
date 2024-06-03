@@ -147,7 +147,8 @@ namespace SitesAdmin.Data
             {
                 site = new Site 
                 { 
-                    Name = "Jake Hooper's Portfolio", 
+                    Name = "Jake Hooper's Portfolio",
+                    Slug = "jake-hooper-portfolio",
                     Description = "My portfolio site showcasing my projects, a technical blog, and my experience.", 
                     BaseUrl = "https://jakehooper.pro/" 
                 };
@@ -159,6 +160,7 @@ namespace SitesAdmin.Data
                 var project = new Project
                 {
                     Name = "Time Trace",
+                    Slug = "time-trace",
                     Description = "Time and bug tracking applicaiton",
                     Body = "Time and issue tracking application for contractors that allows recording of time per project issue to facilitate generation of invoices and project management",
 
@@ -172,6 +174,7 @@ namespace SitesAdmin.Data
                 var category = new Category
                 {
                     Name = "Devlog",
+                    Slug = "devlog",
                     Description = "",
                     SiteId = site.Id,
                 };
@@ -179,6 +182,7 @@ namespace SitesAdmin.Data
                 var category2 = new Category
                 {
                     Name = "Guides",
+                    Slug = "guides",
                     Description = "",
                     SiteId = site.Id,
                 };
@@ -186,6 +190,7 @@ namespace SitesAdmin.Data
                 var category3 = new Category
                 {
                     Name = "News",
+                    Slug = "news",
                     Description = "",
                     SiteId = site.Id,
                 };
@@ -197,6 +202,7 @@ namespace SitesAdmin.Data
                 var tag = new Tag
                 {
                     Name = "Asp.Net",
+                    Slug = "asp-net",
                     Description = "",
                     SiteId = site.Id,
                 };
@@ -204,6 +210,7 @@ namespace SitesAdmin.Data
                 var tag2 = new Tag
                 {
                     Name = "Typescript",
+                    Slug = "typescript",
                     Description = "",
                     SiteId = site.Id,
                 };
@@ -211,6 +218,7 @@ namespace SitesAdmin.Data
                 var tag3 = new Tag
                 {
                     Name = "React",
+                    Slug = "react",
                     Description = "",
                     SiteId = site.Id,
                 };
@@ -224,6 +232,7 @@ namespace SitesAdmin.Data
                 var post = new Post
                 {
                     Title = "Website Launched",
+                    Slug = "website-launched",
                     Description = "Today I launched my new personal protfolio website",
                     Author = "Jake Hooper",
                     Body = @"
@@ -242,6 +251,7 @@ Released and published my first blog post on my new website.
                 var post2 = new Post
                 {
                     Title = "Using NSwag to generate Typescript api clients",
+                    Slug = "website-launched2",
                     Description = "Working through different methods of NSwag",
                     Author = "Jake Hooper",
                     Body = @"
@@ -259,6 +269,7 @@ Released and published my first blog post on my new website.
                 var post3 = new Post
                 {
                     Title = "Website Launched",
+                    Slug = "website-launched3",
                     Description = "Today I launched my new personal protfolio website",
                     Author = "Jake Hooper",
                     Body = @"
@@ -275,6 +286,7 @@ Released and published my first blog post on my new website.
                 var post4 = new Post
                 {
                     Title = "Website Launched",
+                    Slug = "website-launched4",
                     Description = "Today I launched my new personal protfolio website",
                     Author = "Jake Hooper",
                     Body = @"
@@ -291,6 +303,7 @@ Released and published my first blog post on my new website.
                 var post5 = new Post
                 {
                     Title = "Website Launched",
+                    Slug = "website-launched5",
                     Description = "Today I launched my new personal protfolio website",
                     Author = "Jake Hooper",
                     Body = @"

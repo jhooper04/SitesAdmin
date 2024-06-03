@@ -5,6 +5,7 @@ using SitesAdmin.Features.Identity.Dto;
 using SitesAdmin.Features.Identity.Data;
 using SitesAdmin.Services;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace SitesAdmin.Features.Identity
 {
@@ -33,7 +34,15 @@ namespace SitesAdmin.Features.Identity
                 return Ok(null);
             }
 
-            return Ok(new CurrentSession { Username = HttpContext.User.Identity.Name });
+            var managedUser = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+
+            if (managedUser == null)
+            {
+                return Ok(null);
+            }
+
+
+            return Ok(new CurrentSession { Email = HttpContext.User.Identity.Name, Role = managedUser.Role });
         }
 
         [HttpPost]

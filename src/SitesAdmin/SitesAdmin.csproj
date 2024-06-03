@@ -43,7 +43,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Data\Configurations\" />
 	  <Folder Include="Data\Migrations\" />
 	</ItemGroup>
 

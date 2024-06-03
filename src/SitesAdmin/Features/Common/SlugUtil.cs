@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using SitesAdmin.Features.Common.Interfaces;
+using System.Text;
 
 namespace SitesAdmin.Features.Common
 {
@@ -25,6 +26,14 @@ namespace SitesAdmin.Features.Common
             }
 
             return stringBuilder.ToString().ToLower();
+        }
+
+        public static void SetDefaultSlug(ISluggable sluggable)
+        {
+            if (sluggable.Slug == null)
+            {
+                sluggable.Slug = SlugUtil.Slugify(sluggable.GetSlugDisplayName());
+            }
         }
     }
 }
