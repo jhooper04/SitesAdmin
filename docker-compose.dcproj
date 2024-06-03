@@ -8,16 +8,17 @@
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>sitesadmin</DockerServiceName>
-	<AdditionalComposeFilePaths>docker-compose.development.yml</AdditionalComposeFilePaths>
+    <AdditionalComposeFilePaths>docker-compose.development.yml</AdditionalComposeFilePaths>
   </PropertyGroup>
   <ItemGroup>
     <None Include=".env" />
-	<None Include="docker-compose.development.yml">
-		<DependentUpon>docker-compose.yml</DependentUpon>
-	</None>
-	<None Include="docker-compose.production.yml">
-		<DependentUpon>docker-compose.yml</DependentUpon>
-	</None>
+    <None Include=".env.production" />
+    <None Include="docker-compose.development.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.production.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>

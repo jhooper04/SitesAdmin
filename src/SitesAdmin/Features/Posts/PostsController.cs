@@ -214,6 +214,21 @@ namespace SitesAdmin.Features.Posts
             return Ok(await PaginatedList<Post>.CreateAsync<PostResponse>(_mapper, query, request.PageNumber, request.PageSize));
         }
 
+        [HttpGet("category/{categorySlug}/{postSlug}", Name = "[controller]GetBySlug")]
+        [Authorize(Policy = "ApiKeyOrAdmin")]
+        public async Task<ActionResult<PostResponse>> GetBySlug([FromQuery] int siteId, string categorySlug, string postSlug)
+        {
+            var post = await _dbContext.Posts
+                .Where(p => p.SiteId == siteId && 
+                    p.Category.Slug == categorySlug && 
+                    p.Slug == postSlug)
+                .FirstOrDefaultAsync();
+
+            if (post == null) return NotFound(new { CategorySlug = categorySlug, PostSlug = postSlug });
+
+            return Ok(_mapper.Map<PostResponse>(post));
+        }
+
         [HttpGet("{id}", Name="[controller]GetById")]
         [Authorize(Policy = "ApiKeyOrAdmin")]
         public async Task<ActionResult<PostResponse>> GetById([FromQuery] int siteId, int id)
