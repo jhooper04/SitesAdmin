@@ -1,6 +1,4 @@
-﻿using Microsoft.OpenApi.Models;
-using NJsonSchema.Generation;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using NJsonSchema.Generation;
 
 namespace SitesAdmin.Services
 {
@@ -11,18 +9,4 @@ namespace SitesAdmin.Services
             return type?.FullName?.Replace("Response", "") ?? "";
         }
     }
-
-    //public class SchemasVisibility : ISchemaFilter
-    //{
-    //    private readonly string[] VisibleSchemas = { "Schema1", "Schema2" };
-
-    //    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
-    //    {
-    //        foreach (var key in context.SchemaRepository.Schemas.Keys)
-    //        {
-    //            if (!VisibleSchemas.Contains(key))
-    //                context.SchemaRepository.Schemas.Remove(key);
-    //        }
-    //    }
-    //}
 }

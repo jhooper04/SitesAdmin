@@ -99,6 +99,7 @@ namespace SitesAdmin
                         new string[] { }
                     }
                 });
+                option.OperationFilter<FileUploadOperation>();
             });
 
             builder.Services.AddProblemDetails();
@@ -175,9 +176,9 @@ namespace SitesAdmin
 
 
             // These will eventually be moved to a secrets file, but for alpha development appsettings is fine
-            var validIssuer = builder.Configuration.GetValue<string>("BASE_URL"); //builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
-            var validAudience = builder.Configuration.GetValue<string>("AUDIENCE"); //builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
-            var symmetricSecurityKey = builder.Configuration.GetValue<string>("JWT_KEY"); // builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
+            var validIssuer = builder.Configuration.GetValue<string>("BASE_URL"); 
+            var validAudience = builder.Configuration.GetValue<string>("AUDIENCE"); 
+            var symmetricSecurityKey = builder.Configuration.GetValue<string>("JWT_KEY");
 
             if (symmetricSecurityKey == null) infoMessages.Add((LogLevel.Error, $"Missing SymmetricSecurityKey configuration"));
 

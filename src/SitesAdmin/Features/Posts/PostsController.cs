@@ -41,8 +41,8 @@ namespace SitesAdmin.Features.Posts
             SlugUtil.SetDefaultSlug(record);
 
             var category = _dbContext.Categories.Find(record.CategoryId);
-            if (category == null) return BadRequest("Category not found");
-            if (category.SiteId != siteId) return BadRequest("Category doesn't belong to this site");
+            if (category == null) return BadRequest(new { Error = "Category not found"});
+            if (category.SiteId != siteId) return BadRequest(new { Error = "Category doesn't belong to this site" });
 
             // lookup tag names and add them to the post
             var tagNames = post.Tags.Split(",").Distinct().ToList();

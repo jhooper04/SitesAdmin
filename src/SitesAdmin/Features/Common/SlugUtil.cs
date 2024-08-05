@@ -30,7 +30,7 @@ namespace SitesAdmin.Features.Common
 
         public static void SetDefaultSlug(ISluggable sluggable)
         {
-            if (sluggable.Slug == null)
+            if (string.IsNullOrEmpty(sluggable.Slug))
             {
                 sluggable.Slug = SlugUtil.Slugify(sluggable.GetSlugDisplayName());
             }

@@ -30,7 +30,7 @@ namespace SitesAdmin.Features.Assets
                 .ForMember(e => e.Site, c => c.Ignore());
 
 
-            CreateMap<Asset, AssetRequest>()
+            CreateMap<Asset, UploadRequest>()
                 .ForMember(e => e.File, c => c.Ignore());
 
             CreateMap<Folder, FolderRequest>();

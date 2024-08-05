@@ -1,7 +1,8 @@
 ﻿namespace SitesAdmin.Features.Assets.Dto
 {
-    public class AssetRequest
+    public class UploadRequest
     {
+        public IFormFile? File { get; set; }
         public string? Caption { get; set; }
         public string? Description { get; set; } = "";
         public string? AccessRoles { get; set; }

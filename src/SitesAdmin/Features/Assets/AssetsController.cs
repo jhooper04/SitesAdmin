@@ -29,28 +29,31 @@ namespace SitesAdmin.Features.Assets
         }
 
         [HttpPost]
-        public async Task<ActionResult<AssetResponse>> Upload([FromBody] AssetRequest model, [FromQuery] int siteId)
+        public async Task<ActionResult<AssetResponse>> Upload([FromQuery] int siteId, [FromForm] UploadRequest request)
         {
             var uploadsDir = _configuration.GetValue<string>("UploadsDirectory") ?? throw new Exception("Uploads directory not specified in settings");
 
-            var folder = await _dbContext.Folders.Where(f=>f.SiteId == siteId && f.Id == model.FolderId).Include(f => f.Site).FirstOrDefaultAsync();
+            var folder = await _dbContext.Folders.Where(f=>f.SiteId == siteId && f.Id == request.FolderId).Include(f => f.Site).FirstOrDefaultAsync();
 
-            if (folder == null) return BadRequest(new { Error= $"Folder not found {model.FolderId}" });
+            if (folder == null) return BadRequest(new { Error= $"Folder not found {request.FolderId}" });
 
             if (folder.SiteId != siteId) return BadRequest(new { Error = $"Mismatched Site Ids, aborting upload" });
 
-            if (model.File == null) return BadRequest(new { Error = $"File to upload is missing" });
+            if (request.File == null) return BadRequest(new { Error = $"File to upload is missing" });
 
-            if (model.File.ContentType != Path.GetExtension(model.File.FileName)) return BadRequest(new { Error = $"File content type doesn't match extension" });
+            if (request.File.ContentType != Path.GetExtension(request.File.FileName)) return BadRequest(new { Error = $"File content type doesn't match extension" });
 
-            var dbModel = _mapper.Map<Asset>(model);
+            var dbModel = _mapper.Map<Asset>(request);
 
-            var uniqueFileName = GetUniqueFileName(model.File.FileName);
+            var uniqueFileName = GetUniqueFileName(request.File.FileName);
             var filePath = Path.Combine(uploadsDir, folder.Site.Slug ?? throw new Exception("Should Never happen, invalid slug in Upload Assets"), uniqueFileName);
 
-            model.File.CopyTo(new FileStream(filePath, FileMode.Create));
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await request.File.CopyToAsync(stream);
+            }
 
-            dbModel.Filename = model.File.FileName;
+            dbModel.Filename = request.File.FileName;
             dbModel.UniqueFilename = uniqueFileName;
             dbModel.Type = Path.GetExtension(dbModel.Filename);
 
@@ -58,7 +61,7 @@ namespace SitesAdmin.Features.Assets
 
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Upload), new { id = dbModel.Id }, _mapper.Map<AssetResponse>(dbModel));
+            return Ok(_mapper.Map<AssetResponse>(dbModel));
         }
 
         [HttpGet("all", Name ="[controller]List")]
@@ -104,7 +107,7 @@ namespace SitesAdmin.Features.Assets
         }
 
         [HttpPost("{id}", Name = "[controller]Update")]
-        public async Task<ActionResult<AssetResponse>> Update(int id, [FromBody] AssetRequest model, [FromQuery] int siteId)
+        public async Task<ActionResult<AssetResponse>> Update(int id, AssetRequest model, [FromQuery] int siteId)
         {
             if (!ModelState.IsValid)
             {
@@ -142,7 +145,7 @@ namespace SitesAdmin.Features.Assets
             return NoContent();
         }
 
-        [HttpGet(Name ="[controller]GetAllFolders")]
+        [HttpGet(Name = "[controller]GetAllFolders")]
         public async Task<ActionResult<List<FolderResponse>>> GetAllFolders([FromQuery] int siteId)
         {
             var rootFolders = _mapper.Map<List<FolderResponse>>(
@@ -172,6 +175,32 @@ namespace SitesAdmin.Features.Assets
                 folder.SubFolders.Add(subFolder);
                 await LoadSubFoldersAsync(subFolder, siteId);
             }
+        }
+
+        [HttpPost("folder", Name = "[controller]CreateFolder")]
+        public async Task<ActionResult<FolderResponse>> CreateFolder([FromQuery] int siteId, [FromBody] FolderRequest request)
+        {
+            if (request.ParentFolderId != null)
+            {
+                var parentFolder = await _dbContext.Folders.Where(f => f.SiteId == siteId && f.Id == request.ParentFolderId).Include(f => f.Site).FirstOrDefaultAsync();
+
+                if (parentFolder == null) return BadRequest(new { Error = $"Parent folder not found {request.ParentFolderId}" });
+
+                if (parentFolder.SiteId != siteId) return BadRequest(new { Error = $"Mismatched Site Ids, aborting upload" });
+            }
+
+            if (request.ParentFolderId == 0) request.ParentFolderId = null;
+
+            var dbModel = _mapper.Map<Folder>(request);
+            
+            dbModel.SiteId = siteId;
+            SlugUtil.SetDefaultSlug(dbModel);
+
+            _dbContext.Folders.Add(dbModel);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(_mapper.Map<FolderResponse>(dbModel));
         }
 
         private string GetUniqueFileName(string fileName)

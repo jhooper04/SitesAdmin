@@ -87,14 +87,14 @@ namespace SitesAdmin.Features.Identity
 
             if (managedUser == null)
             {
-                return BadRequest("Bad credentials");
+                return BadRequest(new { Message = "Bad credentials" });
             }
 
             var isPasswordValid = await _userManager.CheckPasswordAsync(managedUser, request.Password!);
 
             if (!isPasswordValid)
             {
-                return BadRequest("Bad credentials");
+                return BadRequest(new { Message = "Bad credentials" });
             }
 
             var userInDb = _context.Users.FirstOrDefault(u => u.Email == request.Email);
