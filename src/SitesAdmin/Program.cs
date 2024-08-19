@@ -20,7 +20,6 @@ using SitesAdmin.Features.Identity.Interfaces;
 using SitesAdmin.Features.Identity.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.HttpOverrides;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace SitesAdmin
 {
@@ -100,6 +99,7 @@ namespace SitesAdmin
                     }
                 });
                 option.OperationFilter<FileUploadOperation>();
+                option.SchemaFilter<MarkRequiredNonNullableSchemaFilter>();
             });
 
             builder.Services.AddProblemDetails();
