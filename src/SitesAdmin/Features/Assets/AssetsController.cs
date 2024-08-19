@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SitesAdmin.Data;
+using SitesAdmin.Features.Sites.Data;
 using SitesAdmin.Features.Assets.Dto;
 using SitesAdmin.Features.Assets.Data;
 using SitesAdmin.Features.Common;
 using SitesAdmin.Features.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace SitesAdmin.Features.Assets
 {
@@ -20,6 +22,11 @@ namespace SitesAdmin.Features.Assets
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
+        private static readonly Dictionary<string, string> _contentTypeExtensions = new Dictionary<string, string>
+        {
+            { "png", "image/png" },
+        };
+
         public AssetsController(ILogger<AssetsController> logger, IApplicationDbContext dbContext, IMapper mapper, IConfiguration configuration)
         {
             _logger = logger;
@@ -31,22 +38,64 @@ namespace SitesAdmin.Features.Assets
         [HttpPost]
         public async Task<ActionResult<AssetResponse>> Upload([FromQuery] int siteId, [FromForm] UploadRequest request)
         {
+            Folder? folder = null;
+            Site? site = null;
+
             var uploadsDir = _configuration.GetValue<string>("UploadsDirectory") ?? throw new Exception("Uploads directory not specified in settings");
 
-            var folder = await _dbContext.Folders.Where(f=>f.SiteId == siteId && f.Id == request.FolderId).Include(f => f.Site).FirstOrDefaultAsync();
+            if (request.FolderId == 0) request.FolderId = null;
 
-            if (folder == null) return BadRequest(new { Error= $"Folder not found {request.FolderId}" });
+            if (request.FolderId != null)
+            {
+                folder = await _dbContext.Folders.Where(f => f.SiteId == siteId && f.Id == request.FolderId).Include(f => f.Site).FirstOrDefaultAsync();
 
-            if (folder.SiteId != siteId) return BadRequest(new { Error = $"Mismatched Site Ids, aborting upload" });
+                if (folder == null) return BadRequest(new { Error = $"Folder not found {request.FolderId}" });
+
+                if (folder.SiteId != siteId) return BadRequest(new { Error = $"Mismatched Site Ids, aborting upload" });
+            }
+            else
+            {
+                site = await _dbContext.Sites.FindAsync(siteId);
+                if (site == null) return BadRequest(new { Error = $"Site not found {siteId}" });
+            }
+
+            
 
             if (request.File == null) return BadRequest(new { Error = $"File to upload is missing" });
 
-            if (request.File.ContentType != Path.GetExtension(request.File.FileName)) return BadRequest(new { Error = $"File content type doesn't match extension" });
+            var extension = Path.GetExtension(request.File.FileName).Substring(1);
+            if (!_contentTypeExtensions.ContainsKey(extension) || request.File.ContentType != _contentTypeExtensions[extension]) return BadRequest(new { Error = $"File content type doesn't match extension" });
 
             var dbModel = _mapper.Map<Asset>(request);
 
+            dbModel.SiteId = siteId;
+
             var uniqueFileName = GetUniqueFileName(request.File.FileName);
-            var filePath = Path.Combine(uploadsDir, folder.Site.Slug ?? throw new Exception("Should Never happen, invalid slug in Upload Assets"), uniqueFileName);
+            var directoryPath = "";
+            var filePath = "";
+
+            if (folder != null)
+            {
+                directoryPath = folder.Site.Slug ?? throw new Exception("Folder or site slug is null, invalid slug in Upload Assets");
+            }
+            else if (site != null)  
+            {
+                directoryPath = site.Slug ?? throw new Exception("Site slug is null, invalid slug in Upload Assets");
+            }
+            else
+            {
+                throw new Exception("Missing site and folder, invalid slug in Upload Assets");
+            }
+            directoryPath = Path.Combine(uploadsDir, directoryPath);
+
+            if (directoryPath == uploadsDir) throw new Exception($"Asset upload directory is missing an appropriate site directory: {directoryPath}");
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            filePath = Path.Combine(directoryPath, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -55,17 +104,27 @@ namespace SitesAdmin.Features.Assets
 
             dbModel.Filename = request.File.FileName;
             dbModel.UniqueFilename = uniqueFileName;
-            dbModel.Type = Path.GetExtension(dbModel.Filename);
+            dbModel.Type = _contentTypeExtensions[extension];
+            dbModel.Caption = request.Caption ?? dbModel.Filename;
+            dbModel.Description = request.Description ?? "";
 
             _dbContext.Assets.Add(dbModel);
 
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch
+            {
+                System.IO.File.Delete(filePath);
+                throw;
+            }
 
             return Ok(_mapper.Map<AssetResponse>(dbModel));
         }
 
         [HttpGet("all", Name ="[controller]List")]
-        public async Task<ActionResult<PaginatedList<AssetResponse>>> List([FromQuery] PaginatedRequest request, [FromQuery] int siteId)
+        public async Task<ActionResult<PaginatedList<AssetResponse>>> List([FromQuery, Required] int siteId, [FromQuery] PaginatedRequest request)
         {
             if (request == null) request = new PaginatedRequest();
 
@@ -205,8 +264,7 @@ namespace SitesAdmin.Features.Assets
 
         private string GetUniqueFileName(string fileName)
         {
-            fileName = SlugUtil.Slugify(Path.GetFileName(fileName));
-            return Path.GetFileNameWithoutExtension(fileName)
+            return SlugUtil.Slugify(Path.GetFileNameWithoutExtension(fileName))
                       + "_"
                       + Guid.NewGuid().ToString().Substring(0, 4)
                       + Path.GetExtension(fileName);

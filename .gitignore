@@ -400,3 +400,5 @@ FodyWeavers.xsd
 
 .env
 .env.production
+
+assets/

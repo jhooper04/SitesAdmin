@@ -2,6 +2,7 @@
 {
     public class AssetRequest
     {
+        public string? Filename { get; set; }
         public string? Caption { get; set; }
         public string? Description { get; set; } = "";
         public string? AccessRoles { get; set; }

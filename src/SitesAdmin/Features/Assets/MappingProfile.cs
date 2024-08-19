@@ -29,9 +29,20 @@ namespace SitesAdmin.Features.Assets
                 .ForMember(e => e.SiteId, c => c.Ignore())
                 .ForMember(e => e.Site, c => c.Ignore());
 
-
             CreateMap<Asset, UploadRequest>()
                 .ForMember(e => e.File, c => c.Ignore());
+            CreateMap<UploadRequest, Asset>()
+                .ForMember(e => e.Filename, c => c.Ignore())
+                .ForMember(e => e.UniqueFilename, c => c.Ignore())
+                .ForMember(e => e.Type, c => c.Ignore())
+                .ForMember(e => e.Folder, c => c.Ignore())
+                .ForMember(e => e.Created, c => c.Ignore())
+                .ForMember(e => e.CreatedBy, c => c.Ignore())
+                .ForMember(e => e.LastModified, c => c.Ignore())
+                .ForMember(e => e.LastModifiedBy, c => c.Ignore())
+                .ForMember(e => e.Id, c => c.Ignore())
+                .ForMember(e => e.SiteId, c => c.Ignore())
+                .ForMember(e => e.Site, c => c.Ignore());
 
             CreateMap<Folder, FolderRequest>();
             CreateMap<FolderRequest, Folder>()
