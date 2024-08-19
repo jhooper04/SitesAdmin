@@ -123,7 +123,7 @@ namespace SitesAdmin.Features.Assets
             return Ok(_mapper.Map<AssetResponse>(dbModel));
         }
 
-        [HttpGet("all", Name ="[controller]List")]
+        [HttpGet(Name ="[controller]List")]
         public async Task<ActionResult<PaginatedList<AssetResponse>>> List([FromQuery, Required] int siteId, [FromQuery] PaginatedRequest request)
         {
             if (request == null) request = new PaginatedRequest();
@@ -204,7 +204,7 @@ namespace SitesAdmin.Features.Assets
             return NoContent();
         }
 
-        [HttpGet(Name = "[controller]GetAllFolders")]
+        [HttpGet("folders", Name = "[controller]GetAllFolders")]
         public async Task<ActionResult<List<FolderResponse>>> GetAllFolders([FromQuery] int siteId)
         {
             var rootFolders = _mapper.Map<List<FolderResponse>>(
