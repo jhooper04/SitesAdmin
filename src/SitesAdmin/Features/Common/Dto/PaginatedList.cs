@@ -29,19 +29,66 @@ namespace SitesAdmin.Features.Common
             return (await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(), await source.CountAsync());
         }
 
-        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int? pageNumber = null, int? pageSize = null)
+        public static IQueryable<T> AddOrderBy(IQueryable<T> source, string? orderBy, bool? orderDesc)
+        {
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                var properties = typeof(T).GetProperties();
+                var property = properties.FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
+
+                if (property != null)
+                {
+                    if (orderDesc != true)
+                    {
+                        source = source.OrderBy((p) => EF.Property<object>(p, property.Name ?? "Id")).AsQueryable();
+                    }
+                    else
+                    {
+                        source = source.OrderByDescending((p) => EF.Property<object>(p, property.Name ?? "Id")).AsQueryable();
+                    }
+                }
+                else throw new ArgumentException("Invalid sort column specified");
+            }
+
+            return source;
+        }
+
+        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int? pageNumber = null, int? pageSize = null, string? orderBy = null, bool? orderDesc = null)
         {
             pageNumber = pageNumber ?? 1;
             pageSize = pageSize ?? DefaultPageSize;
+
+            source = AddOrderBy(source, orderBy, orderDesc);
 
             var result = await _PagedQuery(source, pageNumber.Value, pageSize.Value);
             return new PaginatedList<T>(result.Items, result.Count, pageNumber.Value, pageSize.Value);
         }
 
-        public static async Task<PaginatedList<TOut>> CreateAsync<TOut>(IMapper mapper, IQueryable<T> source, int? pageNumber=null, int? pageSize = null)
+        public static async Task<PaginatedList<TOut>> CreateAsync<TOut>(IMapper mapper, IQueryable<T> source, int? pageNumber=null, int? pageSize = null, string? orderBy = null, bool? orderDesc = null)
         {
             pageNumber = pageNumber ?? 1;
             pageSize = pageSize ?? DefaultPageSize;
+
+            source = AddOrderBy(source, orderBy, orderDesc);
+
+            //if (!string.IsNullOrEmpty(orderBy))
+            //{
+            //    var properties = typeof(T).GetProperties();
+            //    var property = properties.FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
+
+            //    if (property != null)
+            //    {
+            //        if (orderDesc != true)
+            //        {
+            //            source = source.OrderBy((p) => EF.Property<object>(p, property.Name ?? "Id")).AsQueryable();
+            //        }
+            //        else
+            //        {
+            //            source = source.OrderByDescending((p) => EF.Property<object>(p, property.Name ?? "Id")).AsQueryable();
+            //        }
+            //    }
+            //    else throw new ArgumentException("Invalid sort column specified");
+            //}
 
             var result = await _PagedQuery(source, pageNumber.Value, pageSize.Value);
 

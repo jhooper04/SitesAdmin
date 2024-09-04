@@ -129,10 +129,9 @@ namespace SitesAdmin.Features.Assets
             if (request == null) request = new PaginatedRequest();
 
             var query = _dbContext.Assets
-                .Where(a => a.SiteId == siteId)
-                .OrderBy(p => EF.Property<object>(p, request.OrderBy ?? "Id")).AsQueryable();
+                .Where(a => a.SiteId == siteId).AsQueryable();
 
-            return Ok(await PaginatedList<Asset>.CreateAsync<AssetResponse>(_mapper, query, request.PageNumber, request.PageSize));
+            return Ok(await PaginatedList<Asset>.CreateAsync<AssetResponse>(_mapper, query, request.PageNumber, request.PageSize, request.OrderBy, request.OrderDesc));
         }
 
         [HttpGet("folder", Name = "[controller]GetByFolder")]
@@ -147,8 +146,9 @@ namespace SitesAdmin.Features.Assets
             if (folder.SiteId != siteId) BadRequest(new { Error = $"Site Ids don't match the folder {folderId}" });
 
             var query = _dbContext.Assets
-                .Where(a => a.FolderId == folderId && a.SiteId == siteId)
-                .OrderBy(p => EF.Property<object>(p, request.OrderBy ?? "Id")).AsQueryable();
+                .Where(a => a.FolderId == folderId && a.SiteId == siteId);
+
+            query = PaginatedList<Asset>.AddOrderBy(query, request.OrderBy, request.OrderDesc);
 
             return Ok(await PaginatedList<Asset>.CreateAsync<AssetResponse>(_mapper, query, request.PageNumber, request.PageSize));
         }
