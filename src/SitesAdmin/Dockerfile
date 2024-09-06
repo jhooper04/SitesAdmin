@@ -30,7 +30,7 @@ COPY --from=publish /app/publish .
 
 RUN mkdir -p /home/app/.aspnet/DataProtection-Keys
 
-RUN mkdir -p /assets/public
-RUN chown -R app /assets
+RUN mkdir -p /home/app/assets/public
+RUN chown -R app /home/app/assets
 
 ENTRYPOINT ["dotnet", "SitesAdmin.dll"]
